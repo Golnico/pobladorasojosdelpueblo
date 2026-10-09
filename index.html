@@ -91,8 +91,11 @@ function verTabla(R){
   }</tbody></table></div><p class="nota"><span style="color:var(--acc)">▍</span>Los 2 primeros juegan la final · Ganar 3 pts · Empatar 1 pt</p>`}
 function verFixture(R){
   const f=R.filter(r=>/^(\d+|Final)$/i.test((r[0]||"").trim()));
+  const listo=f.filter(r=>!/final/i.test(r[0])).every(r=>(r[3]??"")!==""&&(r[4]??"")!=="");
   document.getElementById("fixture").innerHTML=f.map(r=>{
-    const fin=/final/i.test(r[0]),jug=(r[3]??"")!==""&&(r[4]??"")!=="";
+    const fin=/final/i.test(r[0]);
+    if(fin&&!listo){r=[...r];r[2]="1º de la tabla";r[5]="2º de la tabla";}
+    const jug=(r[3]??"")!==""&&(r[4]??"")!=="";
     const a=Number(r[3]),b=Number(r[4]);
     const cl=x=>!jug?"pend":(x?"":"lose");
     return `<div class="m ${fin?"fin":""}"><div class="lb">${fin?"🏆 Final":"Partido "+esc(r[0])}</div>
